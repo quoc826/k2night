@@ -14,6 +14,7 @@ public class Inventory : MonoBehaviour
     public GameObject inventorySlotParent;
 
     public Image dragIcon;
+    
     private Slot draggedSlot = null;
     private bool isDragging = false;
     private List<Slot> inventorySlots = new List<Slot>();
@@ -43,7 +44,7 @@ public class Inventory : MonoBehaviour
 
     public void AddItem(ItemSO itemToAdd, int amount)
     {
-        int remanining = amount;
+        int remaining = amount;
 
         foreach (Slot slot in allSlots)
         {
@@ -55,12 +56,12 @@ public class Inventory : MonoBehaviour
                 if (currentAmount < maxStack)
                 {
                     int spaceLeft = maxStack - currentAmount;
-                    int amountToAdd = Math.Min(spaceLeft, remanining);
+                    int amountToAdd = Math.Min(spaceLeft, remaining);
 
                     slot.SetItem(itemToAdd, currentAmount + amountToAdd);
-                    remanining -= amountToAdd;
+                    remaining -= amountToAdd;
 
-                    if (remanining <= 0) return;
+                    if (remaining <= 0) return;
                 }
             }
         }
@@ -69,16 +70,16 @@ public class Inventory : MonoBehaviour
         {
             if (!slot.HasItem())
             {
-                int amountToPlace = Math.Min(itemToAdd.maxStackSize, remanining);
+                int amountToPlace = Math.Min(itemToAdd.maxStackSize, remaining);
                 slot.SetItem(itemToAdd, amountToPlace);
 
-                remanining -= amountToPlace;
+                remaining -= amountToPlace;
 
-                if (remanining <= 0) return;
+                if (remaining <= 0) return;
             }
         }
 
-        if (remanining > 0)
+        if (remaining > 0)
         {
             Debug.Log("Không đủ chỗ trống trong túi đồ!");
         }

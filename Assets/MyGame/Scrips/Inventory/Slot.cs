@@ -12,11 +12,7 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     [SerializeField] private Image iconImage;
     [SerializeField] private TextMeshProUGUI amountText;
 
-    private void Awake()
-    {
-        // iconImage = transform.GetChild(0).GetComponent<Image>();
-        // amountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-    }
+ 
 
     public ItemSO GetItem()
     {
@@ -93,6 +89,6 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     public void OnPointerExit(PointerEventData eventData)
     {
         hovering = false;
-        //ah
+
     }
 }
