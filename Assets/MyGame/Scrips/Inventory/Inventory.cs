@@ -8,13 +8,17 @@ using Unity.VisualScripting;
 
 public class Inventory : MonoBehaviour
 {
+    public static Inventory Instance;
+
     public ItemSO woodItem;
     public ItemSO axeItem;
     public GameObject hotBarObj;
     public GameObject inventorySlotParent;
 
+    public GameObject container;
+
     public Image dragIcon;
-    
+
     private Slot draggedSlot = null;
     private bool isDragging = false;
     private List<Slot> inventorySlots = new List<Slot>();
@@ -23,6 +27,8 @@ public class Inventory : MonoBehaviour
 
     private void Awake()
     {
+        Instance = this;
+
         inventorySlots.AddRange(inventorySlotParent.GetComponentsInChildren<Slot>());
         hotBarSlots.AddRange(hotBarObj.GetComponentsInChildren<Slot>());
 
@@ -32,9 +38,11 @@ public class Inventory : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            AddItem(woodItem, 5);
+            container.SetActive(!container.activeInHierarchy);
+            Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
+            Cursor.visible = !Cursor.visible;
         }
 
         StartDrag();
@@ -114,8 +122,6 @@ public class Inventory : MonoBehaviour
                 isDragging = false;
             }
         }
-
-
     }
 
     private void HandleDrop(Slot from, Slot to)
@@ -134,7 +140,7 @@ public class Inventory : MonoBehaviour
 
                 if (from.GetItemAmount() <= 0)
                     from.ClearSlot();
-                    return;
+                return;
             }
         }
 
@@ -161,6 +167,7 @@ public class Inventory : MonoBehaviour
             dragIcon.transform.position = Input.mousePosition;
         }
     }
+
     private Slot GetHoveredSlot()
     {
         foreach (Slot s in allSlots)
