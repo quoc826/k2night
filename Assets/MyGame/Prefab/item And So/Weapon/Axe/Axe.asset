@@ -17,3 +17,4 @@ MonoBehaviour:
   maxStackSize: 20
   itemPrefab: {fileID: 8966960520501880208, guid: f929f04882dd3804889d049687f20af4, type: 3}
   handItemPrefab: {fileID: 0}
+  description: a sup Axe

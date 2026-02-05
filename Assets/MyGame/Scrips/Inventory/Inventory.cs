@@ -5,22 +5,34 @@ using System;
 using UnityEngine.UI;
 using System.Security.Cryptography;
 using Unity.VisualScripting;
+using TMPro;
 
 public class Inventory : MonoBehaviour
 {
     public static Inventory Instance;
 
+    [Header("--- Items Data ---")]
     public ItemSO woodItem;
     public ItemSO axeItem;
+
+    [Header("--- UI References ---")]
+    public GameObject container;
     public GameObject hotBarObj;
     public GameObject inventorySlotParent;
 
-    public GameObject container;
-
+    [Header("--- Drag & Drop System ---")]
     public Image dragIcon;
 
-    private Slot draggedSlot = null;
-    private bool isDragging = false;
+    [Header("--- Item Description UI ---")]
+    public GameObject itemDescriptionParent;
+    public Image itemDescriptionImage;
+    public TextMeshProUGUI descriptionIteamNameTxt;
+    public TextMeshProUGUI itemdescriptionTxt;
+
+    [Header("--- Debug/Internal State ---")]
+    [SerializeField] private Slot draggedSlot = null;
+    [SerializeField] private bool isDragging = false;
+
     private List<Slot> inventorySlots = new List<Slot>();
     private List<Slot> hotBarSlots = new List<Slot>();
     private List<Slot> allSlots = new List<Slot>();
@@ -48,6 +60,7 @@ public class Inventory : MonoBehaviour
         StartDrag();
         EndDrag();
         UpdateDragItemPosition();
+        UpdateItemDescription();
     }
 
     public void AddItem(ItemSO itemToAdd, int amount)
@@ -178,5 +191,26 @@ public class Inventory : MonoBehaviour
             }
         }
         return null;
+    }
+
+    private void UpdateItemDescription()
+    {
+        Slot hovered = GetHoveredSlot();
+
+        if (hovered != null)
+        {
+            ItemSO hoveredItem = hovered.GetItem();
+
+            if (hoveredItem != null)
+            {
+                itemDescriptionParent.SetActive(true);
+                itemDescriptionImage.sprite = hoveredItem.icon;
+                itemdescriptionTxt.text = hoveredItem.description;
+                descriptionIteamNameTxt.text = hoveredItem.itemName;
+                return;
+            }
+
+        }
+        itemDescriptionParent.SetActive(false);
     }
 }
