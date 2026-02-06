@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e83e3139ec6c6af4aa8398fb7cfff993, type: 3}
-  m_Name: Wood
-  m_EditorClassIdentifier: Assembly-CSharp::itemSO
-  itemName: Wood
-  icon: {fileID: 5587124563336528128, guid: ac793861bcd603d48a928c0df2d809c1, type: 3}
-  maxStackSize: 10
-  itemPrefab: {fileID: 0}
+  m_Name: SilverIngot
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSO
+  itemName: SilverIngot
+  icon: {fileID: 21300000, guid: d5d7f95582604484a87a97c246803bc7, type: 3}
+  maxStackSize: 64
+  itemPrefab: {fileID: 3505682455968917377, guid: 8c2312ec055d5604faa889f768f18e1f, type: 3}
   handItemPrefab: {fileID: 0}
+  description: 

@@ -23,6 +23,13 @@ public class Inventory : MonoBehaviour
     [Header("--- Drag & Drop System ---")]
     public Image dragIcon;
 
+    [Header("--- Crafing Settings ---")]
+    public List<Recipe> allRecipes = new List<Recipe>();
+    public Transform craftingGrid;
+    public GameObject craftingBTNprefab;
+
+
+
     [Header("--- Item Description UI ---")]
     public GameObject itemDescriptionParent;
     public Image itemDescriptionImage;
@@ -46,6 +53,9 @@ public class Inventory : MonoBehaviour
 
         allSlots.AddRange(inventorySlots);
         allSlots.AddRange(hotBarSlots);
+
+        PopulateCraftingGrid();
+
     }
 
     void Update()
@@ -82,7 +92,11 @@ public class Inventory : MonoBehaviour
                     slot.SetItem(itemToAdd, currentAmount + amountToAdd);
                     remaining -= amountToAdd;
 
-                    if (remaining <= 0) return;
+                    if (remaining <= 0)
+                    {
+                        PopulateCraftingGrid();
+                        return;
+                    }
                 }
             }
         }
@@ -96,7 +110,11 @@ public class Inventory : MonoBehaviour
 
                 remaining -= amountToPlace;
 
-                if (remaining <= 0) return;
+                if (remaining <= 0)
+                {
+                    PopulateCraftingGrid();
+                    return;
+                }
             }
         }
 
@@ -104,6 +122,8 @@ public class Inventory : MonoBehaviour
         {
             Debug.Log("Không đủ chỗ trống trong túi đồ!");
         }
+        PopulateCraftingGrid();
+
     }
 
     private void StartDrag()
@@ -150,9 +170,11 @@ public class Inventory : MonoBehaviour
             {
                 int move = Math.Min(space, from.GetItemAmount());
                 to.SetItem(from.GetItem(), to.GetItemAmount() + move);
+                from.RemoveAmount(move);
 
                 if (from.GetItemAmount() <= 0)
                     from.ClearSlot();
+                PopulateCraftingGrid();
                 return;
             }
         }
@@ -165,12 +187,15 @@ public class Inventory : MonoBehaviour
 
             to.SetItem(from.GetItem(), from.GetItemAmount());
             from.SetItem(tempItem, tempAmount);
+            PopulateCraftingGrid();
             return;
         }
 
         //Empty slot
         to.SetItem(from.GetItem(), from.GetItemAmount());
         from.ClearSlot();
+
+        PopulateCraftingGrid();
     }
 
     private void UpdateDragItemPosition()
@@ -212,5 +237,88 @@ public class Inventory : MonoBehaviour
 
         }
         itemDescriptionParent.SetActive(false);
+    }
+
+
+    // crafting methods would go here
+    private void PopulateCraftingGrid()
+    {
+        for (int i = craftingGrid.childCount - 1; i >= 0; i--)
+        {
+            Destroy(craftingGrid.GetChild(i).gameObject);
+        }
+
+        foreach (Recipe recipe in allRecipes)
+        {
+            GameObject btnObj = Instantiate(craftingBTNprefab, craftingGrid);
+            Image img = btnObj.transform.GetChild(0).GetComponent<Image>();
+            img.sprite = recipe.result.icon;
+            Button btn = btnObj.GetComponent<Button>();
+
+            btn.interactable = CanCraft(recipe);
+            btn.onClick.RemoveAllListeners();
+            btn.onClick.AddListener(() => Craft(recipe));
+        }
+    }
+
+    private void Craft(Recipe recipe)
+    {
+        if (!CanCraft(recipe))
+        {
+            return;
+        }
+
+        ConsumeIngredients(recipe);
+        AddItem(recipe.result, recipe.resultAmount);
+        PopulateCraftingGrid();
+    }
+
+    private void ConsumeIngredients(Recipe recipe)
+    {
+        foreach (Ingredient ingredient in recipe.ingredients)
+        {
+            int remainingToConsume = ingredient.amount;
+
+            foreach (Slot slot in allSlots)
+            {
+                if (slot.HasItem() && slot.GetItem() == ingredient.item)
+                {
+                    int currentInSlot = slot.GetItemAmount();
+                    int take = Math.Min(currentInSlot, remainingToConsume);
+
+                    // Cập nhật lại số lượng trong slot
+                    slot.SetItem(slot.GetItem(), currentInSlot - take);
+                    remainingToConsume -= take;
+
+                    // Nếu slot hết sạch thì xóa item
+                    if (slot.GetItemAmount() <= 0)
+                        slot.ClearSlot();
+
+                    if (remainingToConsume <= 0) break;
+                }
+            }
+        }
+    }
+
+    private bool CanCraft(Recipe recipe)
+    {
+        foreach (Ingredient ingredient in recipe.ingredients)
+        {
+            int totalFound = 0;
+            foreach (Slot slot in allSlots)
+            {
+                if (slot.HasItem() && slot.GetItem() == ingredient.item)
+                {
+                    totalFound += slot.GetItemAmount();
+                }
+            }
+
+            // Sau khi check hết tất cả các slot mà vẫn không đủ thì mới return false
+            if (totalFound < ingredient.amount)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
