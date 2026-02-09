@@ -56,7 +56,11 @@ public class Inventory : MonoBehaviour
 
         PopulateCraftingGrid();
 
+        LoadGame();
+
     }
+
+
 
     void Update()
     {
@@ -71,6 +75,42 @@ public class Inventory : MonoBehaviour
         EndDrag();
         UpdateDragItemPosition();
         UpdateItemDescription();
+    }
+
+    // load game
+    public void LoadGame()
+    {
+        InventoryData data = SaveSystem.LoadInventory();
+        if (data == null) { Debug.Log("Không tìm thấy file save!"); return; }
+
+        for (int i = 0; i < allSlots.Count; i++)
+        {
+            if (i < data.itemNames.Count && !string.IsNullOrEmpty(data.itemNames[i]))
+            {
+                ItemSO item = Resources.Load<ItemSO>("Items/" + data.itemNames[i]);
+
+                if (item != null)
+                {
+                    allSlots[i].SetItem(item, data.itemAmounts[i]);
+                    Debug.Log("Đã nạp thành công: " + data.itemNames[i]);
+                }
+                else
+                {
+                    Debug.LogError("LỖI: Không tìm thấy file " + data.itemNames[i] + " trong Resources/Items/");
+                }
+            }
+        }
+    }
+
+    public void SaveGame()
+    {
+        SaveSystem.SaveInventory(this, allSlots);
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
+        Debug.Log("Game đang thoát... Đã tự động lưu dữ liệu!");
     }
 
     public void AddItem(ItemSO itemToAdd, int amount)
@@ -99,6 +139,7 @@ public class Inventory : MonoBehaviour
                     }
                 }
             }
+
         }
 
         foreach (Slot slot in allSlots)
@@ -117,6 +158,8 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+
+        SaveGame();
 
         if (remaining > 0)
         {
@@ -147,7 +190,7 @@ public class Inventory : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             Slot hovered = GetHoveredSlot();
-            if (hovered != null)
+            if (hovered != null && draggedSlot != null)
             {
                 HandleDrop(draggedSlot, hovered);
                 dragIcon.enabled = false;
@@ -159,6 +202,8 @@ public class Inventory : MonoBehaviour
 
     private void HandleDrop(Slot from, Slot to)
     {
+        if (from == null && to == null) return;
+
         if (from == to) return;
 
         //stacking
@@ -196,6 +241,7 @@ public class Inventory : MonoBehaviour
         from.ClearSlot();
 
         PopulateCraftingGrid();
+        SaveGame();
     }
 
     private void UpdateDragItemPosition()
