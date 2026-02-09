@@ -100,6 +100,8 @@ public class Inventory : MonoBehaviour
                 }
             }
         }
+
+        PopulateCraftingGrid();
     }
 
     public void SaveGame()
