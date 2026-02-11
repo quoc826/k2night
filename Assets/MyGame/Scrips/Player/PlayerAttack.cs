@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -33,7 +34,9 @@ public class PlayerAttack : MonoBehaviour
 
 
     public void AttackController()
-    {
+    {   
+        if(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
         if (Input.GetMouseButtonDown(0) && !isAttacking())
         {
             anim.SetTrigger(attackID);
@@ -46,6 +49,8 @@ public class PlayerAttack : MonoBehaviour
         }
 
     }
+
+ 
 
     public bool isAttacking()
     {

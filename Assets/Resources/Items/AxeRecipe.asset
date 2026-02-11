@@ -18,4 +18,5 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: c326c6dcd098c1947951e34c2fd5b9b0, type: 2}
     amount: 2
   result: {fileID: 11400000, guid: 33835ba3134ef5045b6d8096d8586f72, type: 2}
+  type: weapon
   resultAmount: 1

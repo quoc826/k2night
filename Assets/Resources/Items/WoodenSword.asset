@@ -10,10 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e83e3139ec6c6af4aa8398fb7cfff993, type: 3}
-  m_Name: EmeraldStaff
+  m_Name: WoodenSword
   m_EditorClassIdentifier: Assembly-CSharp::ItemSO
-  itemName: EmeraldStaff
-  icon: {fileID: 21300000, guid: c66629df5b6254a4e8dc8c1b69369863, type: 3}
+  itemName: WoodenSword
+  icon: {fileID: 21300000, guid: 2ddf0348701148a4d8a7c6a0f7f146b3, type: 3}
   maxStackSize: 20
-  itemPrefab: {fileID: 108679849957714262, guid: b0fa70b1c32732e429dd4873394ea618, type: 3}
-  handItemPrefab: {fileID: 0}
+  description: 
+  itemPrefab: {fileID: 4495386729098448702, guid: dc43bd4ad62ea3346b30a4df6d7557ee, type: 3}
+  type: weapon
+  attackDamge: 5
+  armor: 0
+  health: 0
