@@ -40,6 +40,9 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Slot draggedSlot = null;
     [SerializeField] private bool isDragging = false;
 
+    [Header("--- Filter State ---")]
+    private string currentFilter = "All"; 
+
     private List<Slot> inventorySlots = new List<Slot>();
     private List<Slot> hotBarSlots = new List<Slot>();
     private List<Slot> allSlots = new List<Slot>();
@@ -289,7 +292,7 @@ public class Inventory : MonoBehaviour
 
 
     // crafting methods would go here
-    private void PopulateCraftingGrid(String filterType = "All")
+    private void PopulateCraftingGrid()
     {
         for (int i = craftingGrid.childCount - 1; i >= 0; i--)
         {
@@ -298,7 +301,7 @@ public class Inventory : MonoBehaviour
 
         foreach (Recipe recipe in allRecipes)
         {
-            if (filterType == "All" || recipe.type == filterType)
+            if (currentFilter == "All" || recipe.type == currentFilter)
             {
                 Recipe recipeToCraft = recipe;
 
@@ -309,7 +312,7 @@ public class Inventory : MonoBehaviour
 
                 Button btn = btnObj.GetComponent<Button>();
 
-                btn.interactable = CanCraft(recipe);
+                btn.interactable = CanCraft(recipeToCraft);
                 btn.onClick.RemoveAllListeners();
                 btn.onClick.AddListener(() => Craft(recipeToCraft));
             }
@@ -318,7 +321,8 @@ public class Inventory : MonoBehaviour
 
     public void OnFilterButtonClicked(string selectedType)
     {
-        PopulateCraftingGrid(selectedType);
+        currentFilter = selectedType;
+        PopulateCraftingGrid();
     }
 
     private void Craft(Recipe recipe)
