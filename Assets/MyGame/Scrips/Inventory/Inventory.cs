@@ -289,7 +289,7 @@ public class Inventory : MonoBehaviour
 
 
     // crafting methods would go here
-    private void PopulateCraftingGrid()
+    private void PopulateCraftingGrid(String filterType = "All")
     {
         for (int i = craftingGrid.childCount - 1; i >= 0; i--)
         {
@@ -298,15 +298,27 @@ public class Inventory : MonoBehaviour
 
         foreach (Recipe recipe in allRecipes)
         {
-            GameObject btnObj = Instantiate(craftingBTNprefab, craftingGrid);
-            Image img = btnObj.transform.GetChild(0).GetComponent<Image>();
-            img.sprite = recipe.result.icon;
-            Button btn = btnObj.GetComponent<Button>();
+            if (filterType == "All" || recipe.type == filterType)
+            {
+                Recipe recipeToCraft = recipe;
 
-            btn.interactable = CanCraft(recipe);
-            btn.onClick.RemoveAllListeners();
-            btn.onClick.AddListener(() => Craft(recipe));
+                GameObject btnObj = Instantiate(craftingBTNprefab, craftingGrid);
+
+                Image img = btnObj.transform.GetChild(0).GetComponent<Image>();
+                img.sprite = recipe.result.icon;
+
+                Button btn = btnObj.GetComponent<Button>();
+
+                btn.interactable = CanCraft(recipe);
+                btn.onClick.RemoveAllListeners();
+                btn.onClick.AddListener(() => Craft(recipeToCraft));
+            }
         }
+    }
+
+    public void OnFilterButtonClicked(string selectedType)
+    {
+        PopulateCraftingGrid(selectedType);
     }
 
     private void Craft(Recipe recipe)
@@ -369,4 +381,6 @@ public class Inventory : MonoBehaviour
         }
         return true;
     }
+
+
 }

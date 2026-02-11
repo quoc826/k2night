@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GoldenSwordRecipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   ingredients:
-  - item: {fileID: 0}
-    amount: 0
-  - item: {fileID: 0}
-    amount: 0
+  - item: {fileID: 11400000, guid: 91cc6df85ed206643a725c314b3e30a2, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: c326c6dcd098c1947951e34c2fd5b9b0, type: 2}
+    amount: 1
   result: {fileID: 11400000, guid: 92d4f81efae986d488462a58f264cf89, type: 2}
   resultAmount: 1

@@ -13,6 +13,9 @@ public class ItemSO : ScriptableObject
 
 
     [Header("status_item")]
+    
+    public string type;
+
     public int attackDamge;
     public int armor;
     public int health;

@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14de47b2af605474baa72006f8de1b57, type: 3}
   m_Name: KnifeRecipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
-  ingredients: []
+  ingredients:
+  - item: {fileID: 11400000, guid: 9d6e38e2c800cae47a45244772260992, type: 2}
+    amount: 1
+  - item: {fileID: 11400000, guid: c326c6dcd098c1947951e34c2fd5b9b0, type: 2}
+    amount: 1
   result: {fileID: 11400000, guid: e54c59d6ff4fadd4c8abfa2e1826f7f9, type: 2}
   resultAmount: 1

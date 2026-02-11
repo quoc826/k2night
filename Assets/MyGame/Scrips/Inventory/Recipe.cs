@@ -16,6 +16,7 @@ public class Recipe : ScriptableObject
 {
     public List<Ingredient> ingredients;
     public ItemSO result;
+    public string type;
     public int resultAmount = 1;
 
 }

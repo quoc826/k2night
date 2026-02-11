@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: HammerRecipe
   m_EditorClassIdentifier: Assembly-CSharp::Recipe
   ingredients:
-  - item: {fileID: 0}
-    amount: 0
-  - item: {fileID: 0}
-    amount: 0
+  - item: {fileID: 11400000, guid: 9d6e38e2c800cae47a45244772260992, type: 2}
+    amount: 2
+  - item: {fileID: 11400000, guid: c326c6dcd098c1947951e34c2fd5b9b0, type: 2}
+    amount: 2
   result: {fileID: 11400000, guid: 76c31eacf8892f14bbb45f40085e48d3, type: 2}
   resultAmount: 1
