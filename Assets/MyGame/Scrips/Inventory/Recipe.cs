@@ -19,4 +19,6 @@ public class Recipe : ScriptableObject
     public string type;
     public int resultAmount = 1;
 
+    
+
 }

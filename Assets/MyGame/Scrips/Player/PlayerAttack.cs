@@ -7,6 +7,10 @@ public class PlayerAttack : MonoBehaviour
     [Header("Attack")]
 
     public int attackDamage = 10;
+    public int armor = 5;
+
+    public int spell = 1;
+    
     public float nextAttackTime = 0.2f;
     public float attackDuration = 4f;  // Thời gian tấn công
     private float attackEndTime = 0f;    // Thời điểm kết thúc tấn công
@@ -92,4 +96,36 @@ public class PlayerAttack : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
+
+
+    //set get
+    public int GetAttackDamage()
+    {
+        return attackDamage;
+    }
+    public void SetAttackDamage(int attackDamage)
+    {
+        this.attackDamage = attackDamage;
+    }
+
+    public int GetArmor()
+    {
+        return armor;
+    }
+
+    public void SetArmor(int armor)
+    {
+        this.armor = armor;
+    }
+
+    public int GetSpell()
+    {
+        return spell;
+    }
+
+    public void SetSpell(int spell)
+    {
+        this.spell = spell;
+    }
+
 }

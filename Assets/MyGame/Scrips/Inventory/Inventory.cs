@@ -20,6 +20,12 @@ public class Inventory : MonoBehaviour
     public GameObject hotBarObj;
     public GameObject inventorySlotParent;
 
+    [Header("--- Use BTN ---")]
+
+    public GameObject useItemBTN;
+    public Button useBTN;
+    private Slot pendingSlot; // slot đang chờ sử dụng
+
     [Header("--- Drag & Drop System ---")]
     public Image dragIcon;
 
@@ -41,7 +47,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private bool isDragging = false;
 
     [Header("--- Filter State ---")]
-    private string currentFilter = "All"; 
+    private string currentFilter = "All";
 
     private List<Slot> inventorySlots = new List<Slot>();
     private List<Slot> hotBarSlots = new List<Slot>();
@@ -73,6 +79,13 @@ public class Inventory : MonoBehaviour
             Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.None : CursorLockMode.Locked;
             Cursor.visible = !Cursor.visible;
         }
+
+        if (Input.GetMouseButtonDown(1)) // Chuột phải
+        {
+            ShowUseButton();
+        }
+
+
 
         StartDrag();
         EndDrag();
@@ -290,7 +303,115 @@ public class Inventory : MonoBehaviour
         itemDescriptionParent.SetActive(false);
     }
 
+    // USE ITEM
 
+private void UseItem(Slot slot, PlayerAttack currentPlayerAttack)
+    {
+        ItemSO item = slot.GetItem();
+        if (item == null) return;
+        bool wasUsed = false;
+
+        // Chuẩn hóa chuỗi: Biến " Weapon ", "WEAPON" thành "weapon" để tránh lỗi do gõ phím
+        string safeItemType = string.IsNullOrEmpty(item.type) ? "TRỐNG" : item.type.ToLower().Trim();
+
+        Debug.Log("Hệ thống đang kiểm tra type: [" + safeItemType + "]"); // In ra để kiểm tra
+
+        switch (safeItemType)
+        {
+            case "weapon":
+                int newDamage = currentPlayerAttack.GetAttackDamage() + item.attackDamage;
+                currentPlayerAttack.SetAttackDamage(newDamage);
+                wasUsed = true;
+                Debug.Log("<color=cyan>Thành công! Đã cộng sát thương. Damage mới: " + newDamage + "</color>");
+                break;
+
+            case "armor":
+                int newArmor = currentPlayerAttack.GetArmor() + item.armor;
+                currentPlayerAttack.SetArmor(newArmor);
+                wasUsed = true;
+                Debug.Log("<color=cyan>Thành công! Đã cộng giáp. Giáp mới: " + newArmor + "</color>");
+                break;
+
+            case "spell":
+                int newSpell = currentPlayerAttack.GetSpell() + item.spell;
+                currentPlayerAttack.SetSpell(newSpell);
+                wasUsed = true;
+                Debug.Log("<color=cyan>Thành công! Đã cộng phép. Phép mới: " + newSpell + "</color>");
+                break;
+
+            default:
+                Debug.LogWarning("<color=red>LỖI TYPE: Item '" + item.itemName + "' có type là '" + item.type + "'. Type này không tồn tại trong code (chỉ nhận weapon, armor, spell)!</color>");
+                wasUsed = false;
+                break;
+        }
+
+        if (wasUsed)
+        {
+            slot.RemoveAmount(1);
+            if (slot.GetItemAmount() <= 0)
+            {
+                slot.ClearSlot();
+            }
+            Debug.Log("<color=green>Đã trừ vật phẩm thành công!</color>");
+            SaveGame();
+            PopulateCraftingGrid();
+        }
+    }
+
+
+    private void ShowUseButton()
+    {
+        Slot hovered = GetHoveredSlot();
+        if (hovered != null && hovered.HasItem())
+        {
+            useItemBTN.SetActive(true);
+            pendingSlot = hovered;
+        }
+        else
+        {
+            useItemBTN.SetActive(false);
+            pendingSlot = null;
+        }
+    }
+
+
+    public void OnButtonClickUseItem()
+    {
+        // 1. Kiểm tra xem nút có thực sự nhận click không
+        Debug.Log("--- ĐÃ BẤM VÀO NÚT USE ---");
+
+        if (pendingSlot == null)
+        {
+            Debug.Log("<color=red>LỖI: pendingSlot đang bị NULL!</color> Bạn chưa chọn ô nào hoặc slot bị reset.");
+            return;
+        }
+        else if (!pendingSlot.HasItem())
+        {
+            Debug.Log("<color=red>LỖI: Ô đang chọn không có item nào!</color>");
+            return;
+        }
+
+        PlayerAttack pa = FindFirstObjectByType<PlayerAttack>();
+
+        if (pa != null)
+        {
+            Debug.Log("<color=green>Đã tìm thấy PlayerAttack! Đang dùng item: </color>" + pendingSlot.GetItem().itemName);
+            UseItem(pendingSlot, pa); // Gọi hàm UseItem
+            useItemBTN.SetActive(false);
+            pendingSlot = null;
+        }
+        else
+        {
+            Debug.LogWarning("<color=red>LỖI: Không tìm thấy GameObject nào chứa script PlayerAttack trong Scene!</color>");
+        }
+    }
+
+    // private void HideUseMenu()
+    // {
+
+    //     useItemBTN.SetActive(false);
+
+    // }
     // crafting methods would go here
     private void PopulateCraftingGrid()
     {

@@ -16,9 +16,9 @@ public class ItemSO : ScriptableObject
     
     public string type;
 
-    public int attackDamge;
+    public int attackDamage;
     public int armor;
     public int health;
 
-
+    public int spell;
 }
