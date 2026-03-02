@@ -65,6 +65,7 @@ public class PlayerAttack : MonoBehaviour
     IEnumerator Attack()
     {
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        Debug.Log("Hit " + hitEnemies.Length + " enemies.");
         for (int i = 0; i < hitEnemies.Length; i++)
         {
 

@@ -21,7 +21,8 @@ MonoBehaviour:
     strikes, providing a reliable +2 Armor bonus to overall defense. A perfect balance
     between a lethal weapon and a steadfast shield."'
   itemPrefab: {fileID: 8966960520501880208, guid: f929f04882dd3804889d049687f20af4, type: 3}
-  handItemPrefab: {fileID: 0}
-  attackDamge: 20
+  type: weapon
+  attackDamage: 1000
   armor: 2
   health: 0
+  spell: 0

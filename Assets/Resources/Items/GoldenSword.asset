@@ -17,6 +17,8 @@ MonoBehaviour:
   maxStackSize: 20
   description: 
   itemPrefab: {fileID: 6081882303161839477, guid: 4dec52a0bf51bf6439d694cfcad3a415, type: 3}
-  attackDamge: 20
+  type: weapon
+  attackDamage: 0
   armor: 0
   health: 0
+  spell: 0
