@@ -51,7 +51,7 @@ public class PlayerMove : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         rb.linearVelocity = new Vector2(horizontal * moveSpeed, rb.linearVelocity.y);
 
-        if (math.abs(rb.linearVelocity.x) > 0.1f && isGroundCheck())
+        if (math.abs(rb.linearVelocity.x) > 0.0f && isGroundCheck())
         {
 
             anim.SetBool(isRunID, true);
